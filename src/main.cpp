@@ -32,7 +32,6 @@ int main( void ) {
             }
 
             // Normalize the coef
-            // calculate for the vertical
             if ( l == 0 && k == 0 ) {
                 coef *= 1.0/sqrt( 8.0 );
             } else {
