@@ -21,22 +21,22 @@ int main( void ) {
 
     // define coefs ( calculate the dct frequencies in the meantime )
     for ( double l = 0; l < 8; l++ ) {
-        for (double k = 0; k < 8; k++ ) {
+        for ( double k = 0; k < 8; k++ ) {
             double coef = 0;
             for ( int i = 0; i < 8; i++ ) {
                 for ( int j = 0; j < 8; j++ ) {
-                    double verticalWave = M_PI/8.0 * (2*l + 1) * i;
-                    double horizontalWave = M_PI/8.0 * (2*k + 1) * j;
-                    coef += image[i][j] * cos(verticalWave) * cos(horizontalWave);
+                    double verticalWave = M_PI/8.0 * ( 2*l + 1 ) * i;
+                    double horizontalWave = M_PI/8.0 * ( 2*k + 1 ) * j;
+                    coef += image[i][j] * cos( verticalWave ) * cos( horizontalWave );
                 }
             }
 
             // Normalize the coef
             // calculate for the vertical
-            if (l == 0 && k == 0) {
-                coef *= 1.0/sqrt(8.0);
+            if ( l == 0 && k == 0 ) {
+                coef *= 1.0/sqrt( 8.0 );
             } else {
-                coef *= 2.0/sqrt(8.0);
+                coef *= 2.0/sqrt( 8.0 );
             }
 
             // define final coef value
@@ -46,8 +46,9 @@ int main( void ) {
 
     for ( int i = 0; i < 8; i++ ) {
         for ( int j = 0; j < 8; j++ ) {
-            std::cout << coefs[i][j] << std::endl;
+            std::cout << coefs[i][j] << " ";
         }
+        std::cout << std::endl;
     }
 
     return 0;
