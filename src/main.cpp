@@ -1,54 +1,70 @@
 #include <iostream>
-#include <vector>
-#include <array>
 #include <cmath>
+#include <float.h>
 
 int main( void ) {
     // dummy image
     double image[8][8] = {
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
-        {1, 2, 3, 4, 5, 6, 7, 8},
+		{1,   19,  37,  55,  73,  91,  109, 127},
+		{19,  37,  55,  73,  91,  109, 127, 145},
+		{37,  55,  73,  91,  109, 127, 145, 163},
+		{55,  73,  91,  109, 127, 145, 163, 181},
+		{73,  91,  109, 127, 145, 163, 181, 199},
+		{91,  109, 127, 145, 163, 181, 199, 217},
+		{109, 127, 145, 163, 181, 199, 217, 235},
+		{127, 145, 163, 181, 199, 217, 235, 253}
     };
 
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			image[i][j] = j;
+		}
+	}
+
     // matrix that contains the coeficients for each dct wave
-    std::array<std::array<double, 8>, 8> coefs = {0};
+    double coefs[8][8] = {0};
+	
+	int i, j, x, y;
 
-    // define coefs ( calculate the dct frequencies in the meantime )
-    for ( double l = 0; l < 8; l++ ) {
-        for ( double k = 0; k < 8; k++ ) {
-            double coef = 0;
-            for ( int i = 0; i < 8; i++ ) {
-                for ( int j = 0; j < 8; j++ ) {
-                    double verticalWave = M_PI/8.0 * ( 2*l + 1 ) * i;
-                    double horizontalWave = M_PI/8.0 * ( 2*k + 1 ) * j;
-                    coef += image[i][j] * cos( verticalWave ) * cos( horizontalWave );
-                }
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			float sum = 0;
+
+			for (x = 0; x < 8; x++) {
+				for (y = 0; y < 8; y++) {
+					double verticalWave = ((2.f * y + 1.f) * j * M_PI)/(2.f * 8.f);
+					double horizontalWave = ((2.f * x + 1.f) * i * M_PI)/(2.f * 8.f);
+					
+					sum += cos(verticalWave) * cos(horizontalWave) * image[x][y];
+				}
+			}
+
+			double normalizationFactor;
+
+			if (i == 0 && j == 0) {
+				normalizationFactor = (double)1/sqrt(8.f) * (double)1/sqrt(8);
+			} else if (i == 0 || j == 0) {
+				normalizationFactor = (double)1/sqrt(8) * sqrt((double)1/4);
+			} else {
+				normalizationFactor = sqrt((double)2/8) * sqrt((double)2/8);
+			}
+
+			sum *= normalizationFactor;
+
+			if (fabs(sum) < 1e-2) {
+                sum = 0.0;
             }
+			
+			coefs[i][j] = sum;
+		}
+	}
 
-            // Normalize the coef
-            if ( l == 0 && k == 0 ) {
-                coef *= 1.0/sqrt( 8.0 );
-            } else {
-                coef *= 2.0/sqrt( 8.0 );
-            }
-
-            // define final coef value
-            coefs[l][k] = coef;
-        }
-    }
-
-    for ( int i = 0; i < 8; i++ ) {
-        for ( int j = 0; j < 8; j++ ) {
-            std::cout << coefs[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
-
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			std::cout << coefs[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+	
     return 0;
 }
